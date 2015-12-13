@@ -82,19 +82,6 @@ fte_post_parse_analyse(ParseState *pstate, Query *query)
 		prev_post_parse_analyze_hook(pstate, query);
     }
 
-	/*
-	 * Utility statements get queryId zero.  We do this even in cases where
-	 * the statement contains an optimizable statement for which a queryId
-	 * could be derived (such as EXPLAIN or DECLARE CURSOR).  For such cases,
-	 * runtime control will first go through ProcessUtility and then the
-	 * executor, and we don't want the executor hooks to do anything, since we
-	 * are already measuring the statement's costs at the utility level.
-	 */
-	if (query->utilityStmt)
-	{
-		return;
-	}
-
     rewrite_query(query);
 }
 
