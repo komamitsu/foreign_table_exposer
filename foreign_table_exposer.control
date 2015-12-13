@@ -1,0 +1,5 @@
+# foreign_table_exposer extension
+comment = 'expose foreign tables as a regular table'
+default_version = '1.0'
+module_pathname = '$libdir/foreign_table_exposer'
+relocatable = true
