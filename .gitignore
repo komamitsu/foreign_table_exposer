@@ -1,0 +1,3 @@
+foreign_table_exposer.o
+foreign_table_exposer.so
+results/*.out
