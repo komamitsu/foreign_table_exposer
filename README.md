@@ -17,7 +17,7 @@ Execute this statement when you want to enable this feature.
     CREATE EXTENSION foreign_table_exposer;
     
 ## Usage
-When you scan `pg_catalog.pg_class` with a predicate `relkind in ('r', 'v')`, this extension automatically rewrites the query to include `'f'` (foreign table).
+When you scan `pg_catalog.pg_class` with a predicate like `relkind in ('r', 'v')`, this extension automatically rewrites the query to include `'f'` (foreign table).
 
     postgres=#
       select
