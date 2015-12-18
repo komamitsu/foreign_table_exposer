@@ -1,0 +1,44 @@
+{
+   "name": "foreign_table_exposer",
+   "abstract": "Expose foreign tables as a regular table",
+   "description": "PostgreSQL extension which exposes foreign tables as a regular table.",
+   "version": "1.0.0",
+   "maintainer": "Mitsunori Komatsu <komamitsu@gmail.com>",
+   "license": "apache_2_0",
+   "provides": {
+      "foreign_table_exposer": {
+         "abstract": "Expose foreign tables as a regular table",
+         "file": "foreign_table_exposer--1.0.sql",
+         "docfile": "README.md",
+         "version": "1.0.0"
+      }
+   },
+   "prereqs": {
+      "runtime": {
+         "requires": {
+            "PostgreSQL": "9.3.0"
+         }
+      }
+   },
+   "resources": {
+      "bugtracker": {
+        "web": "https://github.com/komamitsu/foreign_table_exposer/issues"
+      },
+      "repository": {
+        "url":  "https://github.com/komamitsu/foreign_table_exposer.git",
+        "web":  "https://github.com/komamitsu/foreign_table_exposer/",
+        "type": "git"
+      }
+   },
+   "generated_by": "Mitsunori Komatsu",
+   "meta-spec": {
+      "version": "1.0.0",
+      "url": "http://pgxn.org/meta/spec.txt"
+   },
+   "tags": [
+      "table",
+      "plan",
+      "fdw",
+      "foreign data wrapper"
+   ]
+}
