@@ -7,6 +7,10 @@ This PostgreSQL extension exposes foreign tables like a normal table with rewrit
     $ make
     $ sudo make install
 
+or
+
+    $ pgxnclient install foreign_table_exposer
+
 ## Setup
 Write this line in your `postgresql.conf` and then restart PostgreSQL.
 
