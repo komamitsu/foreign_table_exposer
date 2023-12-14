@@ -4,35 +4,58 @@ This PostgreSQL extension exposes foreign tables like a normal table with rewrit
 
 ## Installation
 
-    $ make
-    $ sudo make install
+Add a directory of `pg_config` to PATH and build and install it.
+
+```sh
+make USE_PGXS=1
+make install USE_PGXS=1
+```
+
+If you want to build it in a source tree of PostgreSQL, use
+
+```sh
+make
+make install
+```
 
 or
 
-    $ pgxnclient install foreign_table_exposer
+```bash
+    pgxnclient install foreign_table_exposer
+```
 
 ## Setup
+
 Write this line in your `postgresql.conf` and then restart PostgreSQL.
 
-    shared_preload_libraries = 'foreign_table_exposer'
+```
+shared_preload_libraries = 'foreign_table_exposer'
+```
 
 Execute this statement when you want to enable this feature.
 
-    CREATE EXTENSION foreign_table_exposer;
-    
+```sql
+CREATE EXTENSION foreign_table_exposer;
+```
+
 ## Usage
+
 When you scan `pg_catalog.pg_class` with a predicate like `relkind in ('r', 'v')`, this extension automatically rewrites the query to include `'f'` (foreign table).
 
-    postgres=#
-      select
-        relname, nspname, relkind
-      from
-        pg_catalog.pg_class c,
-        pg_catalog.pg_namespace n
-      where relkind in ('r', 'v') and
-        nspname not in ('pg_catalog', 'information_schema', 'pg_toast', 'pg_temp_1') and
-        n.oid = relnamespace order by nspname, relname;
+```sql
+select
+  relname, nspname, relkind
+from
+  pg_catalog.pg_class c,
+  pg_catalog.pg_namespace n
+where relkind in ('r', 'v') and
+  nspname not in ('pg_catalog', 'information_schema', 'pg_toast', 'pg_temp_1') and
+  n.oid = relnamespace order by nspname, relname;
+```
 
+returns
+
+```
          relname      | nspname | relkind
     ------------------+---------+---------
       normal_tbl      | public  | r
@@ -40,3 +63,4 @@ When you scan `pg_catalog.pg_class` with a predicate like `relkind in ('r', 'v')
       example_view    | public  | v
       (3 rows)
 
+```

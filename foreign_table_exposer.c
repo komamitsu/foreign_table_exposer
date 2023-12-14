@@ -44,7 +44,11 @@ static post_parse_analyze_hook_type prev_post_parse_analyze_hook = NULL;
 void		_PG_init(void);
 void		_PG_fini(void);
 
+#if PG14_LT
 static void fte_post_parse_analyse(ParseState *pstate, Query *query);
+#else
+static void fte_post_parse_analyse(ParseState *pstate, Query *query,JumbleState *jstate);
+#endif  
 static void rewrite_query(Query *query);
 static bool walker(Node *node, List *relkinds);
 
@@ -75,11 +79,20 @@ _PG_fini(void)
  * Post-parse-analysis hook: mark query with a queryId
  */
 static void
-fte_post_parse_analyse(ParseState *pstate, Query *query)
+
+#if PG14_LT
+		fte_post_parse_analyse(ParseState *pstate, Query *query)
+#else
+		fte_post_parse_analyse(ParseState *pstate, Query *query,JumbleState *jstate)
+#endif  
 {
 	if (prev_post_parse_analyze_hook)
     {
+#if PG14_LT
 		prev_post_parse_analyze_hook(pstate, query);
+#else
+		prev_post_parse_analyze_hook(pstate, query, jstate);
+#endif        
     }
 
     rewrite_query(query);
@@ -135,13 +148,15 @@ rewrite_query(Query *query)
         if (is_pg_class && rte->eref != NULL) {
             int varattrno_index = 1;
             ListCell *lc_colname;
+            PgClassRelKindPos *relkindPos;
             foreach(lc_colname, rte->eref->colnames)
             {
                 char *colname = strVal(lfirst(lc_colname));
                 if (strcmp(colname, COL_RELKIND) == 0)
                 {
                     ereport(DEBUG1, (errmsg("Found pg_catalog.pg_class.relkind: [varno:%d, varattno:%d]", varno_index, varattrno_index)));
-                    PgClassRelKindPos *relkindPos = (PgClassRelKindPos*) palloc(sizeof(PgClassRelKindPos));
+                    
+                    relkindPos = (PgClassRelKindPos*) palloc(sizeof(PgClassRelKindPos));
                     relkindPos->varno = varno_index;
                     relkindPos->varattno = varattrno_index;
                     relkinds = lappend(relkinds, relkindPos);
